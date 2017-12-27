@@ -18,8 +18,11 @@
 
 
   
-<?php 
-$dir = scandir('/xampp/htdocs/nizhegorodtsev/FileManager/www');
+<?php
+if(!empty($_GET))$way = $_GET['way'];
+else $way = 'www';
+ 
+$dir = scandir('/xampp/htdocs/nizhegorodtsev/FileManager/'.$way);
 array_splice($dir, 0, 2); // видаляємо крапки в масиві
 
 $files = array();
@@ -46,10 +49,12 @@ foreach($dir as $key => $value){
       </tr>
     </thead>
     <tbody>
+	
 	<?php 
+	
 	foreach($folders as $key => $value):?>
       <tr>
-        <td><?php echo '<img src="img/folders-icon.png">'.$value ?></td>
+        <td><img src="img/folders-icon.png"><a href="?way=<?php echo $way.'/'.$value ?>"><?php echo $value ?></a></td>
         <td>Folder</td>
         <td>- - -</td>
       </tr>	
@@ -64,7 +69,7 @@ foreach($dir as $key => $value){
         <td><?php echo '<img src="img/files-icon.png">'.$value ?></td>
 	<?php endif ?>
         <td><?php echo strstr($value, '.') ?></td>
-        <td><?php echo filesize('/xampp/htdocs/nizhegorodtsev/FileManager/www/'.$value)?> b</td>
+        <td><?php echo filesize('/xampp/htdocs/nizhegorodtsev/FileManager/'.$way.'/'.$value)?> b</td>
       </tr>	
 	<?php endforeach ?>
 
