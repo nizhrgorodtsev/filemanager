@@ -1,0 +1,33 @@
+.tp-caption.excerpt {
+font-size:50px;
+line-height:36px;
+font-weight:400;
+font-family:Raleway;
+color:rgb(255, 255, 255);
+text-decoration:none;
+background-color:transparent;
+padding:1px 4px 0px;
+text-transform:uppercase;
+text-shadow:none;
+margin:0px;
+letter-spacing:-1.5px;
+height:auto;
+border-width:0px;
+border-color:rgb(255, 255, 255);
+border-style:none;
+}
+
+.tp-caption.thintext_dark {
+font-size:18px;
+line-height:26px;
+font-weight:300;
+font-family:"Raleway";
+color:rgb(255, 255, 255);
+text-decoration:none;
+background-color:transparent;
+text-shadow:none;
+border-width:0px;
+border-color:rgb(255, 255, 255);
+border-style:none;
+}
+
