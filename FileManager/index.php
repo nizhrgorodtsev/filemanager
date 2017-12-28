@@ -11,6 +11,7 @@
 	.scroll{
 		height:600px;
 		overflow-y:scroll;
+		border:1px solid grey;
 	}
   </style>
 </head>
@@ -38,6 +39,36 @@ foreach($dir as $key => $value){
 </div>
 
 <div class="container">
+<div class="row">
+	<div class="col-md-3">
+		<div class="scroll">
+		
+			
+			<?php 
+				$tree = explode("/", $way);
+				$folders_left = array();			
+				echo '<ul class="list-unstyled"><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
+				foreach($tree as $key => $value){
+				echo '<ul class="list-unstyled">';
+				if($value == 'www') $i = $value;
+				else $i = $i.'/'.$value;
+				$dir_left = scandir('/xampp/htdocs/nizhegorodtsev/FileManager/'.$i);
+				array_splice($dir_left, 0, 2);	
+					foreach($dir_left as $key => $value){
+						if(!strrchr($value, '.'))array_push ($folders_left, $value);			
+					}
+					foreach($folders_left as $key => $value){
+						echo '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>';
+					}
+					echo '</ul>';
+					$folders_left = array(); // обовязково очистити	масив array_push
+				}
+				echo '<pre>'; print_r($tree); //
+			?>
+				
+		</div>
+	</div>
+	<div class="col-md-9">
 <div class="scroll">
   <table class="table table-striped">
     <thead>
@@ -91,6 +122,8 @@ foreach($dir as $key => $value){
 
     </tbody>
   </table>
+  </div>
+  </div>
   </div>
 </div>
 
