@@ -36,39 +36,64 @@ foreach($dir as $key => $value){
 
 <div class="jumbotron text-center">
   <h1>My First File Manager</h1>
+  <?php
+	$test = ['a', 'b', 'c' ];
+	print_r($test);
+	echo '<br>';
+	$test[0] = $test[0].'w';
+	print_r($test);
+  ?>
 </div>
 
 <div class="container">
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-6">
 		<div class="scroll">
 		
 			
 			<?php 
-				$tree = explode("/", $way);
-				$folders_left = array();			
-				echo '<ul class="list-unstyled"><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
-				foreach($tree as $key => $value){
-				echo '<ul class="list-unstyled">';
-				if($value == 'www') $i = $value;
-				else $i = $i.'/'.$value;
-				$dir_left = scandir('/xampp/htdocs/nizhegorodtsev/FileManager/'.$i);
-				array_splice($dir_left, 0, 2);	
-					foreach($dir_left as $key => $value){
-						if(!strrchr($value, '.'))array_push ($folders_left, $value);			
-					}
-					foreach($folders_left as $key => $value){
-						echo '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>';
-					}
-					echo '</ul>';
-					$folders_left = array(); // обовязково очистити	масив array_push
+				echo '<ul><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
+				
+				$tree = explode("/", $way); 
+				$folders_left = array();
+				$allstring = array();
+				foreach($tree as $key => $tree_value){
+					if($tree_value == 'www') $i = $tree_value;
+					else $i = $i.'/'.$tree_value;
+					$dir_left = scandir('/xampp/htdocs/nizhegorodtsev/FileManager/'.$i);
+					array_splice($dir_left, 0, 2);	
+						foreach($dir_left as $key => $value){
+							if(!strrchr($value, '.'))array_push ($folders_left, $value);			
+						}
+						foreach($folders_left as $key => $value){
+							//echo '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>';
+							//замість виводу записуємо html код в багаторівневий асоціативний масив
+							$string[$value] = '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a>'; 
+						}
+					$allstring[$tree_value] = $string; 
+					$string = array();
+					$folders_left = array(); // обовязково очистити	масив 
 				}
-				echo '<pre>'; print_r($tree); //
+
+				//скрипт вкладеності масивів згідно з гет параметрами.
+				$num = count($tree); 
+
+				for($i = $num-1; $i>0; $i--){
+
+					$index1 = $tree[$i-1];
+					$index2 = $tree[$i];
+
+					$allstring[$index1][$index2] = array($allstring[$index1][$index2], $allstring[$index2]);	
+				}				
+				
+				echo '<pre>';				
+				print_r($allstring['www']); //
+				echo '</pre>';
 			?>
 				
 		</div>
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-6">
 <div class="scroll">
   <table class="table table-striped">
     <thead>
