@@ -13,12 +13,23 @@
 		overflow-y:scroll;
 		border:1px solid grey;
 	}
+	
+	.tree{
+		margin-left:15px;
+	}
+	
+	.tree li:first-child{
+		margin-left:-15px;
+	}
+	
+	.tree .tree li:first-child{
+		margin-left:0px;
+	}
   </style>
 </head>
 <body>
 
-
-  
+ 
 <?php
 if(!empty($_GET))$way = $_GET['way'];
 else $way = 'www';
@@ -36,13 +47,6 @@ foreach($dir as $key => $value){
 
 <div class="jumbotron text-center">
   <h1>My First File Manager</h1>
-  <?php
-	$test = ['a', 'b', 'c' ];
-	print_r($test);
-	echo '<br>';
-	$test[0] = $test[0].'w';
-	print_r($test);
-  ?>
 </div>
 
 <div class="container">
@@ -52,7 +56,7 @@ foreach($dir as $key => $value){
 		
 			
 			<?php 
-				echo '<ul><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
+				//echo '<ul><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
 				
 				$tree = explode("/", $way); 
 				$folders_left = array();
@@ -84,11 +88,23 @@ foreach($dir as $key => $value){
 					$index2 = $tree[$i];
 
 					$allstring[$index1][$index2] = array($allstring[$index1][$index2], $allstring[$index2]);	
-				}				
+				}
 				
-				echo '<pre>';				
-				print_r($allstring['www']); //
-				echo '</pre>';
+				//скрипт виводу багаторівневого асоціативного масиву за допомогою рекурсивної функції
+				function print_array($current_array){
+					foreach($current_array as $key => $current_value){
+						if(is_array($current_value)){
+							echo '<ul class="list-unstyled tree">';
+							print_array($current_value);
+							echo '</ul>';
+						}
+						else echo $current_value;
+					}				
+				}
+				//запуск функції виводу масиву
+				echo '<ul class="list-unstyled">';
+				print_array($allstring['www']);
+				echo '</ul>';			
 			?>
 				
 		</div>
