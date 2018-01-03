@@ -14,17 +14,59 @@
 		border:1px solid grey;
 	}
 	
-	.tree{
-		margin-left:15px;
-	}
-	
-	.tree li:first-child{
-		margin-left:-15px;
-	}
-	
-	.tree .tree li:first-child{
-		margin-left:0px;
-	}
+ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}	
+ul ul ul ul {
+	margin-left:0px;
+	border-left:0;
+}
+ul ul ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}	
+ul ul ul ul ul ul {
+	margin-left:0px;
+	border-left:0;
+}	
+ul ul ul ul ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}	
+ul ul ul ul ul ul ul ul {
+	margin-left:0px;
+	border-left:0;	
+}
+ul ul ul ul ul ul ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}
+ul ul ul ul ul ul ul ul ul ul {
+	margin-left:0px;
+	border-left:0;	
+}
+ul ul ul ul ul ul ul ul ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}
+ul ul ul ul ul ul ul ul ul ul ul ul {
+	margin-left:0px;
+	border-left:0;	
+}
+ul ul ul ul ul ul ul ul ul ul ul ul ul {
+	margin-left:15px;
+	border-left:1px solid grey;	
+}
+ul ul ul ul ul ul ul ul ul ul ul ul ul ul {
+	margin-left:0px;
+	border-left:0;	
+}
+
+ul li {
+	margin-left:5px;
+}
+
   </style>
 </head>
 <body>
@@ -51,12 +93,12 @@ foreach($dir as $key => $value){
 
 <div class="container">
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-3">
 		<div class="scroll">
 		
 			
 			<?php 
-				//echo '<ul><li><img src="img/folders-icon.png"><a href="?way=www">www</a></li></ul>'; // корінь
+
 				
 				$tree = explode("/", $way); 
 				$folders_left = array();
@@ -72,7 +114,7 @@ foreach($dir as $key => $value){
 						foreach($folders_left as $key => $value){
 							//echo '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>';
 							//замість виводу записуємо html код в багаторівневий асоціативний масив
-							$string[$value] = '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a>'; 
+							$string[$value] = '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>'; 
 						}
 					$allstring[$tree_value] = $string; 
 					$string = array();
@@ -94,22 +136,27 @@ foreach($dir as $key => $value){
 				function print_array($current_array){
 					foreach($current_array as $key => $current_value){
 						if(is_array($current_value)){
-							echo '<ul class="list-unstyled tree">';
+							echo '<ul class="list-unstyled">';
 							print_array($current_value);
 							echo '</ul>';
 						}
 						else echo $current_value;
 					}				
 				}
+				
+				
+				echo '<li class="list-unstyled" style="margin-left:5px;"><img src="img/folders-icon.png"><a href="?way=www">www</a></li>'; // корінь
+				
 				//запуск функції виводу масиву
 				echo '<ul class="list-unstyled">';
 				print_array($allstring['www']);
-				echo '</ul>';			
+				echo '</ul>';
+				
 			?>
 				
 		</div>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-9">
 <div class="scroll">
   <table class="table table-striped">
     <thead>
