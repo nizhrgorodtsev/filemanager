@@ -13,59 +13,13 @@
 		overflow-y:scroll;
 		border:1px solid grey;
 	}
-	
-ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}	
-ul ul ul ul {
-	margin-left:0px;
-	border-left:0;
-}
-ul ul ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}	
-ul ul ul ul ul ul {
-	margin-left:0px;
-	border-left:0;
-}	
-ul ul ul ul ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}	
-ul ul ul ul ul ul ul ul {
-	margin-left:0px;
-	border-left:0;	
-}
-ul ul ul ul ul ul ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}
-ul ul ul ul ul ul ul ul ul ul {
-	margin-left:0px;
-	border-left:0;	
-}
-ul ul ul ul ul ul ul ul ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}
-ul ul ul ul ul ul ul ul ul ul ul ul {
-	margin-left:0px;
-	border-left:0;	
-}
-ul ul ul ul ul ul ul ul ul ul ul ul ul {
-	margin-left:15px;
-	border-left:1px solid grey;	
-}
-ul ul ul ul ul ul ul ul ul ul ul ul ul ul {
-	margin-left:0px;
-	border-left:0;	
-}
-
-ul li {
-	margin-left:5px;
-}
+	.tree{
+		margin-left:15px; 
+		border-left:1px solid grey;
+	}
+	ul li {
+		margin-left:5px;
+	}
 
   </style>
 </head>
@@ -133,17 +87,34 @@ foreach($dir as $key => $value){
 				}
 				
 				//скрипт виводу багаторівневого асоціативного масиву за допомогою рекурсивної функції
+				$switch = '0'; // перемикач
 				function print_array($current_array){
+					global $switch;				
 					foreach($current_array as $key => $current_value){
 						if(is_array($current_value)){
-							echo '<ul class="list-unstyled">';
-							print_array($current_value);
-							echo '</ul>';
+						
+							switch($switch){
+							
+								case '0':
+								$switch = '1';
+								echo '<ul class="list-unstyled">'; // без відступу і полоси
+								print_array($current_value);
+								echo '</ul>';
+								
+								break;
+								
+								case '1':
+								$switch = '0';
+								echo '<ul class="list-unstyled tree">'; // з відступом і полосою
+								print_array($current_value);
+								echo '</ul>';
+								break;	
+								
+							}
 						}
 						else echo $current_value;
 					}				
 				}
-				
 				
 				echo '<li class="list-unstyled" style="margin-left:5px;"><img src="img/folders-icon.png"><a href="?way=www">www</a></li>'; // корінь
 				
