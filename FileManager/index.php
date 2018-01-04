@@ -14,17 +14,29 @@
 		border:1px solid grey;
 	}
 	.tree{
-		margin-left:15px; 
+		margin-left:20px; 
 		border-left:1px solid grey;
 	}
-	ul li {
+	li{
+		background:url(img/closed-folder.jpg) no-repeat left center;
 		margin-left:5px;
-	}
+		padding-left:30px !important;		
+	}	
 
   </style>
 </head>
 <body>
 
+
+<script>
+$(document).ready(function(){
+	var x = document.getElementsByClassName("open");
+	var i;
+	for (i = 0; i < x.length; i++) {
+		x[i].firstElementChild.style.backgroundImage = "url(img/opened-folder.jpg)";
+	}
+});
+</script>
  
 <?php
 if(!empty($_GET))$way = $_GET['way'];
@@ -68,7 +80,7 @@ foreach($dir as $key => $value){
 						foreach($folders_left as $key => $value){
 							//echo '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>';
 							//замість виводу записуємо html код в багаторівневий асоціативний масив
-							$string[$value] = '<li><img src="img/folders-icon.png"><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>'; 
+							$string[$value] = '<li><a href="?way='.$i.'/'.$value.'">'.$value.'</a></li>'; 
 						}
 					$allstring[$tree_value] = $string; 
 					$string = array();
@@ -97,7 +109,7 @@ foreach($dir as $key => $value){
 							
 								case '0':
 								$switch = '1';
-								echo '<ul class="list-unstyled">'; // без відступу і полоси
+								echo '<ul class="list-unstyled open">'; // без відступу і полоси
 								print_array($current_value);
 								echo '</ul>';
 								
@@ -116,7 +128,7 @@ foreach($dir as $key => $value){
 					}				
 				}
 				
-				echo '<li class="list-unstyled" style="margin-left:5px;"><img src="img/folders-icon.png"><a href="?way=www">www</a></li>'; // корінь
+				echo '<li class="list-unstyled"><a href="?way=www">www</a></li>'; // корінь
 				
 				//запуск функції виводу масиву
 				echo '<ul class="list-unstyled">';
@@ -142,7 +154,7 @@ foreach($dir as $key => $value){
 	<?php //виводим іконки папок, назви папок, ссилки з гет параметрами для роботи вкладеності
 	foreach($folders as $key => $value):?>
       <tr>
-        <td><img src="img/folders-icon.png"><a href="?way=<?php echo $way.'/'.$value ?>"><?php echo $value ?></a></td>
+        <td><img src="img/closed-folder.jpg"><a href="?way=<?php echo $way.'/'.$value ?>"><?php echo $value ?></a></td>
         <td>Folder</td>
         <td>- - -</td>
       </tr>	
