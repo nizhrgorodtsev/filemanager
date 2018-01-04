@@ -15,12 +15,13 @@
 	}
 	.tree{
 		margin-left:20px; 
-		border-left:1px solid grey;
+		border-left:1px dashed Silver;
 	}
 	li{
 		background:url(img/closed-folder.jpg) no-repeat left center;
 		margin-left:5px;
-		padding-left:30px !important;		
+		padding-left:30px !important;
+		margin-top:9px;
 	}	
 
   </style>
@@ -112,7 +113,6 @@ foreach($dir as $key => $value){
 								echo '<ul class="list-unstyled open">'; // без відступу і полоси
 								print_array($current_value);
 								echo '</ul>';
-								
 								break;
 								
 								case '1':
@@ -128,7 +128,7 @@ foreach($dir as $key => $value){
 					}				
 				}
 				
-				echo '<li class="list-unstyled"><a href="?way=www">www</a></li>'; // корінь
+				echo '<li class="list-unstyled" style="background-image:url(img/opened-folder.jpg)"><a href="?way=www">www</a></li>'; // корінь
 				
 				//запуск функції виводу масиву
 				echo '<ul class="list-unstyled">';
