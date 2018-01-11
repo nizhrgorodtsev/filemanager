@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -181,13 +184,18 @@ foreach($dir as $key => $value){
 <!------------------ вивід контекстного меню клік пр. кн. мишки -------------------------->	
 	<script>
 		$(document).ready(function(){
+			var conClick = $("#rename").attr("href");
 			$('.rightClick').contextmenu(function(event){
 				$('#context-menu').css({
 					display: 'block',
 					left: event.pageX,
 					top: event.pageY
 				});
-				return false;				
+				//Запис гетпараметрів для ренейма видалення та інфо
+				$("#rename").attr('href', conClick + '&rename=' + $(this).html());
+				$("#delite").attr('href', conClick + '&delite=' + $(this).html());
+				$("#info").attr('href', conClick + '&info=' + $(this).html());				
+				return false;
 			});
 			$("body").click(function(e) {
 				if($(e.target).closest("#context-menu").length==0) $("#context-menu").css("display","none");
@@ -295,12 +303,12 @@ foreach($dir as $key => $value){
 			  <form method="post">
 			  <textarea name="EditFile" style="min-height:400px; width:100%;">
 				<?php 
-					if(!empty($_GET['edit'])){/*
+					if(!empty($_GET['edit'])){
 						$str = file($way.'/'.$_GET['edit']);
 						foreach($str as $key => $value)	{
 							echo $value;
-						}*/
-						echo file_get_contents($way.'/'.$_GET['edit']);
+						}
+						//echo file_get_contents($way.'/'.$_GET['edit']);
 					}
 					else echo '';
 					if(!empty($_POST['EditFile']))
@@ -329,15 +337,81 @@ foreach($dir as $key => $value){
 		  <!-- Modal -->
 		  
 		  
+
+<!-- Trigger the modal Rename -->
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#RenameModal" style="display:none;">
+<?php 
+	if(!empty($_GET['rename']) and empty($_POST['RenameName'])){
+		echo '1';
+	}
+	else{
+		echo '0';
+	}
+?>  
+  
+</button>
+
+  <!-- Modal Rename -->
+  <div class="modal fade" id="RenameModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Rename File</h4>
+        </div>
+        <div class="modal-body">
+		  <form method="post">
+			<div class="form-group">
+			  <label for="rnm">Enter new name:</label>
+			  <input type="text" class="form-control" id="rnm" name="RenameName">
+			</div>
+			<input type="submit" id="rnmSubmit" style="display:none;">
+		  </form>
+        </div>
+        <div class="modal-footer">
+		  <button type="button" class="btn btn-default" id="imitRnmSubmit">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  <script>
+			$(document).ready(function(){
+				
+				if($('[data-target="#RenameModal"]').html() == 1) $('[data-target="#RenameModal"]').click();
+				
+				$("#imitRnmSubmit").click(function(){
+					$("#rnmSubmit").click();
+				});
+				// планую дописати value = поточна назва
+			});
+
+			
+		  </script>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <?php 
+	if(!empty($_POST['RenameName'])){
+		$oldName = $way.'/'.$_GET['rename'];
+		$newName = $way.'/'.$_POST['RenameName'];
+		rename($oldName, $newName);
+		header("Location: ?way=".$way);
+		}
+		
+  ?>
+		  
+		  
   </div>
   </div>
   </div>
 </div>
 
 <div id="context-menu">
-		<p><a href="">Rename</a></p>
-		<p><a href="">Delite</a></p>
-		<p><a href="">Info</a></p>
+		<p><a id="rename" href="?way=<?php echo $way ?>">Rename</a></p>
+		<p><a id="delite" href="?way=<?php echo $way ?>">Delite</a></p>
+		<p><a id="info" href="?way=<?php echo $way ?>">Info</a></p>
 </div>
 
 </body>
