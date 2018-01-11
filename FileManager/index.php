@@ -8,10 +8,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
+	a:focus, a:hover {
+	outline:none;
+	text-decoration:none;
+	}
 	.scroll{
 		height:600px;
 		overflow-y:scroll;
 		border:1px solid grey;
+		margin-top:15px;
 	}
 	.tree{
 		margin-left:20px; 
@@ -19,16 +24,32 @@
 	}
 	li{
 		background:url(img/closed-folder.jpg) no-repeat left center;
-		margin-left:5px;
+		margin-left:8px;
 		padding-left:30px !important;
 		margin-top:9px;
-	}	
+	}
 
+	#context-menu p{
+		border-bottom:1px solid silver;
+		padding:5px 10px;
+		margin:0;
+	}
+	#context-menu p:last-child{
+		border-bottom:0;
+	}
+	#context-menu{
+		background:#fff;
+		display:none;
+		position:absolute;
+		border:1px solid silver;
+		border-radius:5px;
+		font-size:18px;
+	}
   </style>
 </head>
 <body>
 
-
+<!-------------  зміна зображення для відкритої папки ------------------>
 <script>
 $(document).ready(function(){
 	var x = document.getElementsByClassName("open");
@@ -53,20 +74,18 @@ foreach($dir as $key => $value){
 	else array_push ($folders, $value);
 }
 ?>
-
+<!--
 <div class="jumbotron text-center">
   <h1>My First File Manager</h1>
 </div>
+-->
 
 <div class="container">
 <div class="row">
 	<div class="col-md-3">
 		<div class="scroll">
-		
 			
 			<?php 
-
-				
 				$tree = explode("/", $way); 
 				$folders_left = array();
 				$allstring = array();
@@ -134,13 +153,13 @@ foreach($dir as $key => $value){
 				echo '<ul class="list-unstyled">';
 				print_array($allstring['www']);
 				echo '</ul>';
-				
 			?>
 				
 		</div>
 	</div>
 	<div class="col-md-9">
 <div class="scroll">
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -159,43 +178,166 @@ foreach($dir as $key => $value){
         <td>- - -</td>
       </tr>	
 	<?php endforeach ?>
-	
+<!------------------ вивід контекстного меню клік пр. кн. мишки -------------------------->	
+	<script>
+		$(document).ready(function(){
+			$('.rightClick').contextmenu(function(event){
+				$('#context-menu').css({
+					display: 'block',
+					left: event.pageX,
+					top: event.pageY
+				});
+				return false;				
+			});
+			$("body").click(function(e) {
+				if($(e.target).closest("#context-menu").length==0) $("#context-menu").css("display","none");
+			});
+			$('.scroll').scroll(function(){
+				$("#context-menu").css("display","none");
+			});
+		});
+	</script>
 	<?php //виводим іконки різноманітних типів файлів, назви файлів
 	foreach($files as $key => $value):?>
 		<tr>
 	<?php if(strrchr($value, '.') == '.php'):?>
-        <td><?php echo '<img src="img/php_icon.png">'.$value ?></td>
+        <td><img src="img/php_icon.png"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>
 	<?php elseif(strrchr($value, '.') == '.html'):?>
-        <td><?php echo '<img src="img/html_icon.png">'.$value ?></td>
+        <td><img src="img/html_icon.png"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>
 	<?php elseif(strrchr($value, '.') == '.zip'):?>
         <td><?php echo '<img src="img/zip-icon.jpg">'.$value ?></td>		
 	<?php elseif(strrchr($value, '.') == '.xml'):?>
-        <td><?php echo '<img src="img/xml-icon.png">'.$value ?></td>
+        <td><img src="img/xml-icon.png"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>
 	<?php elseif(strrchr($value, '.') == '.sql'):?>
         <td><?php echo '<img src="img/sql-icon.png">'.$value ?></td>
 	<?php elseif(strrchr($value, '.') == '.css'):?>
-        <td><?php echo '<img src="img/css-icon.jpg">'.$value ?></td>
+        <td><img src="img/css-icon.jpg"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>
 	<?php elseif(strrchr($value, '.') == '.js'):?>
-        <td><?php echo '<img src="img/js-icon.png">'.$value ?></td>		
+        <td><img src="img/js-icon.png"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>		
 	<?php elseif(strrchr($value, '.') == '.jpg'):?>
-        <td><?php echo '<img src="img/jpg-icon.jpg">'.$value ?></td>
+        <td><img src="img/jpg-icon.jpg"><a class="rightClick" href="" data-toggle="modal" data-target="#myModal"><?php echo $value ?></a></td>
 	<?php elseif(strrchr($value, '.') == '.png'):?>
-        <td><?php echo '<img src="img/png-icon.jpg">'.$value ?></td>	
+        <td><img src="img/png-icon.jpg"><a class="rightClick" href="" data-toggle="modal" data-target="#myModal"><?php echo $value ?></a></td>	
 	<?php elseif(strrchr($value, '.') == '.gif'):?>
-        <td><?php echo '<img src="img/gif-icon.jpg">'.$value ?></td>			
+        <td><img src="img/gif-icon.jpg"><a class="rightClick" href="" data-toggle="modal" data-target="#myModal"><?php echo $value ?></a></td>			
 	<?php else: ?>
-        <td><?php echo '<img src="img/files-icon.png">'.$value ?></td>
+        <td><img src="img/files-icon.png"><a class="rightClick" href="?way=<?php echo $way ?>&edit=<?php echo $value ?>"><?php echo $value ?></a></td>
 	<?php endif ?>
         <td><?php echo strrchr($value, '.') ?></td>
         <td><?php echo filesize('/xampp/htdocs/nizhegorodtsev/FileManager/'.$way.'/'.$value)?> b</td>
       </tr>	
 	<?php endforeach ?>
-
+	
+<!-------------------- Прхована кнопка виклику модального вікна редагування файлу -------------------------->	
+	<button data-toggle="modal" data-target="#EditModal" style="display:none;">
+	<?php 
+					if(!empty($_GET['edit']) and empty($_POST['EditFile'])){
+					echo '1';
+					}
+					else echo '0';
+	?>
+	</button>
+<!---------------------- імітація натискання схованої кнопки визова модального вкна редагування файлу  ------------------------------>	
+	<script>
+		$(document).ready(function(){
+			if($('[data-target="#EditModal"]').html() == 1){
+				$('[data-target="#EditModal"]').click();
+			} 
+		});
+	</script>	
     </tbody>
   </table>
+		  <!-- Modal прегеляд зображень-->
+		<div id="myModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog modal-lg">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">View Image</h4>
+			  </div>
+			  <div class="modal-body">
+				<img class="img-responsive center-block" data-src="<?php echo $way.'/' ?>">
+				<!------------ Заміна картинок відповідно до клікнутої ссилки --------------->
+				<script>
+				$(document).ready(function(){
+					var way = $('.modal-body img').attr('data-src');
+					$('[data-target="#myModal"]').click(function(){
+						var src = way + $(this).html();
+						$('.modal-body img').attr('src', src);
+					});				
+				});
+				</script>
+				
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+
+		  </div>
+		</div>
+		  <!-- Modal -->
+		  
+		  
+		  <!-- Modal Редагування файлів -->
+		<div id="EditModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog modal-lg">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Edit File</h4>
+			  </div>
+			  <div class="modal-body">
+			  <form method="post">
+			  <textarea name="EditFile" style="min-height:400px; width:100%;">
+				<?php 
+					if(!empty($_GET['edit'])){/*
+						$str = file($way.'/'.$_GET['edit']);
+						foreach($str as $key => $value)	{
+							echo $value;
+						}*/
+						echo file_get_contents($way.'/'.$_GET['edit']);
+					}
+					else echo '';
+					if(!empty($_POST['EditFile']))
+						file_put_contents($way.'/'.$_GET['edit'], $_POST['EditFile']); 					
+				?>
+				</textarea>
+				<button id="save_file" type="submit" style="display:none;"></button>
+				</form>
+				<!------------- імітація кліку по прихованій кнопці поза межам форми -------------->
+				<script>
+					$(document).ready(function(){
+						$('[data-action="submit"]').click(function(){
+							$('#save_file').click();
+						});
+					});
+				</script>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-action="submit">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+
+		  </div>
+		</div>
+		  <!-- Modal -->
+		  
+		  
   </div>
   </div>
   </div>
+</div>
+
+<div id="context-menu">
+		<p><a href="">Rename</a></p>
+		<p><a href="">Delite</a></p>
+		<p><a href="">Info</a></p>
 </div>
 
 </body>
