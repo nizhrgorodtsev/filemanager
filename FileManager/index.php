@@ -239,7 +239,7 @@ foreach($dir as $key => $value){
 <!-------------------- Прхована кнопка виклику модального вікна редагування файлу -------------------------->	
 	<button data-toggle="modal" data-target="#EditModal" style="display:none;">
 	<?php 
-					if(!empty($_GET['edit']) and empty($_POST['EditFile'])){
+					if(!empty($_GET['edit'])){
 					echo '1';
 					}
 					else echo '0';
@@ -311,8 +311,10 @@ foreach($dir as $key => $value){
 						//echo file_get_contents($way.'/'.$_GET['edit']);
 					}
 					else echo '';
-					if(!empty($_POST['EditFile']))
-						file_put_contents($way.'/'.$_GET['edit'], $_POST['EditFile']); 					
+					if(!empty($_POST['EditFile'])){
+						file_put_contents($way.'/'.$_GET['edit'], $_POST['EditFile']);	
+						header("Location: ?way=".$way);								
+						}			
 				?>
 				</textarea>
 				<button id="save_file" type="submit" style="display:none;"></button>
@@ -341,7 +343,7 @@ foreach($dir as $key => $value){
 <!-- Trigger the modal Rename -->
   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#RenameModal" style="display:none;">
 <?php 
-	if(!empty($_GET['rename']) and empty($_POST['RenameName'])){
+	if(!empty($_GET['rename'])){
 		echo '1';
 	}
 	else{
